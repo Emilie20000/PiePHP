@@ -15,6 +15,7 @@
             <label for="password">Password : </label>
             <input type="password" name="password" id="password">
         </div>
+        <button type="submit">Connexion</button>
     </form>
 </body>
 </html>
