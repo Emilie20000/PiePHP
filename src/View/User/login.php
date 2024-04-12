@@ -6,7 +6,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="index.php" method="post">
+    <form action="/index.php" method="post">
         <div>
             <label for="email">Email : </label>
             <input type="email" name="email" id="email">
