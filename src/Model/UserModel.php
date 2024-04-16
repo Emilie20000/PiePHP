@@ -3,6 +3,7 @@
 namespace Model;
 
 use Core\Database;
+use PDO;
 
 class UserModel {
 
@@ -12,12 +13,11 @@ class UserModel {
         $this->db = Database::getConnection();
     }
 
-    public function getById($id) {
-        $query = 'SELECT * FROM users WHERE id = :id';
+    public function getUsers() {
+        $query = 'SELECT * FROM users';
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $results = $stmt->fetch();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }   
 
