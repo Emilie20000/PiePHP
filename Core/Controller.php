@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller;
+namespace Core;
 
 use Model\UserModel;
 
@@ -8,30 +8,36 @@ class Controller {
 
    protected static $_render;
 
-   protected function render($view, $scope = []) {
-    extract($scope);
-    $viewFilePath = implode(DIRECTORY_SEPARATOR, [
-        dirname(__DIR__), 
-        'src', 
-        'View', 
-        str_replace('Controller', '', basename(get_class($this))), 
-        $view
-    ]) . '.php';
-    
-    if (file_exists($viewFilePath)) {
-        ob_start();
-        include $viewFilePath;
-        $viewContent = ob_get_clean();
-        
-        ob_start();
-        include implode(DIRECTORY_SEPARATOR, [
-            dirname(__DIR__), 
-            'src', 'View', 'index']) . '.php';
+   public function __destruct() {
+    echo self::$_render;
+}
 
-        self::$_render = ob_get_clean();
-        
-        }       
+   protected function render($view, $scope = []){
+        extract($scope);
+        $className = str_replace('Controller', '',
+                     basename(str_replace('\\', '/',
+                      get_class($this))));
+
+        $f = implode(DIRECTORY_SEPARATOR, 
+            [dirname(__DIR__), 'src', 'View', $className, $view])
+             . '.php';
+
+        if(file_exists($f)){
+            ob_start();
+            include($f);
+            $view = ob_get_clean();
+            ob_start();
+            include(implode(DIRECTORY_SEPARATOR, 
+            [dirname(__DIR__), 'src', 'View', 'index'])
+             . '.php');
+
+            self::$_render = ob_get_clean();
+            
+        }
     }
 }
+
+
+
 
 ?>
