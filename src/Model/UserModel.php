@@ -17,7 +17,7 @@ class UserModel {
         $this->password = $password;
     }
 
-    public function getUsers() {
+    public function read_all() {
         $query = 'SELECT * FROM users';
         $stmt = $this->db->prepare($query);
         $stmt->execute();
@@ -25,7 +25,17 @@ class UserModel {
         return $results;
     }
 
-    public function save() {
+
+    public function read() {
+        $query = 'SELECT * FROM users WHERE id = :id';
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public function create() {
         $query = 'INSERT INTO users (email, password)
                  VALUES (:email, :password)';
 
@@ -34,15 +44,21 @@ class UserModel {
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $this->password);
 
-        $results = $stmt->execute();
+        $result = $stmt->execute();
         
-        if ($results->rowCount() > 0) {
+        if ($result) {
             return true;
         }
 
     }
     
-    
+    public function update() {
+
+    }
+
+    public function delete() {
+
+    }
 
     
 }
