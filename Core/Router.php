@@ -3,38 +3,22 @@
 namespace Core;
 
 class Router {
-    private $routes = [];
 
-    public function addRoute($route, $controllerMethod) {
-        $this->routes[$route] = $controllerMethod;
-        return $route;
+    private static $routes;
+
+    public static function connect($url, $route) {
+        self::$routes[$url] = $route;
     }
 
-    public function matchUri($uri) {
-        if (array_key_exists($uri, $this->routes)) {
-            $controllerMethod = $this->routes[$uri];
-            $this->callControllerMethod($controllerMethod);
+    public static function get($url) {
 
-        }else {
-            echo 'Route non trouvée';
-        }
-    }
+        if (array_key_exists($url, self::$routes)) {
+            $route = self::$routes[$url];
 
-    private function callControllerMethod($controllerMethod) {
-        list($controller, $method) = explode('@', $controllerMethod);
-        $controller = 'Controller\\' . $controller;
-   
-        if (class_exists($controller)) {
-            $controllerInstance = new $controller();
-            if (method_exists($controllerInstance, $method)) {
-                $controllerInstance->$method();
-            } else {
-                echo 'La méthode ' . $method . ' n\'existe pas';
-            }
-        } else {
-            echo 'Le controller ' . $controller . ' n\'existe pas'; 
+            return $route;
         }
     }
 }
 
 ?>
+
