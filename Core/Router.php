@@ -10,16 +10,16 @@ class Router {
         self::$routes[$url] = $route;
     }
 
-    /*public static function get($url) {
+    public static function get($url) {
 
         if (array_key_exists($url, self::$routes)) {
             $route = self::$routes[$url];
 
             return $route;
         }
-    }*/
+    }
 
-    public static function get($url) {
+    public static function dynamicGet($url) {
         $urlParts = explode('/', $url);
 
         $piePHPIndex = array_search('PiePHP', $urlParts);

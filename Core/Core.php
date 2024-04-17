@@ -16,7 +16,7 @@
             $route = Router::get($currentUrl);
 
             if ($route) {
-                $controllerName = $route['controller'] . 'Controller';
+                $controllerName = ucfirst($route['controller']) . 'Controller';
                 $actionName = $route['action'] . 'Action';
 
                 $controller = 'Controller\\' . $controllerName;
@@ -33,7 +33,28 @@
                     echo '404';
                 }
             } else {
-                echo '404';
+                $dynamicRoute = Router::dynamicGet($currentUrl);
+
+                if ($dynamicRoute) {
+                    $controllerName = ucfirst($dynamicRoute['controller']) . 'Controller';
+                    $actionName = $dynamicRoute['action'] . 'Action';
+    
+                    $controller = 'Controller\\' . $controllerName;
+            
+                    if (class_exists($controller)) {
+                        $controllerInstance = new $controller();
+            
+                        if (method_exists($controllerInstance, $actionName)) {
+                            $controllerInstance->$actionName();
+                        } else {
+                            echo '404';
+                        }
+                    } else {
+                        echo '404';
+                    }
+                } else {
+                    echo '404';
+                }
             }
         }
     }
