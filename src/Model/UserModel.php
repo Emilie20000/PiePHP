@@ -47,6 +47,19 @@ class UserModel extends Entity {
     public function desactiveUser() {
 
     }
+
+    public function findUser() {
+
+        $params = [
+            'WHERE' => 'email = :email'
+        ];
+
+        $email = $this->email;
+
+        $params['params'] = [':email' => $email];
+
+        return $this->orm->find($this->table, $params);
+    }
     
 }
 

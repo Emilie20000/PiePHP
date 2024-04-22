@@ -6,7 +6,10 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="/index.php" method="post">
+    <form action="user/login" method="post">
+        <div class="">
+            <h2 class="">Connexion</h2>
+        </div> 
         <div>
             <label for="email">Email : </label>
             <input type="email" name="email" id="email">

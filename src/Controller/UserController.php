@@ -13,8 +13,12 @@ class UserController extends Controller {
         parent::__construct();
     }
 
-    public function addAction() {
+    public function addRegisterAction() {
         $this->render('register');
+    }
+
+    public function addLoginAction() {
+        $this->render('login');
     }
 
     public function registerAction() {
@@ -41,6 +45,31 @@ class UserController extends Controller {
             }
 
         }
+    }
+
+    public function loginAction() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $email = $this->request->post('email');
+            $password = $this->request->post('password');
+
+            $data = [
+                'email' => $email,
+                'password' => $password
+            ];
+
+            $userModel = new UserModel($data);
+
+            $user = $userModel->findUser($data);
+
+            if ($user && $data['password'] === $user['password']) {
+                echo 'Bienvenue' . $user['email'];
+            } else {
+                echo 'Erreur lors de la connexion';
+            }
+
+        }
+
     }
     
 }
