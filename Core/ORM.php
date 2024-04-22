@@ -11,7 +11,6 @@ class ORM {
 
     public function __construct() {
         $this->db = Database::getConnection();
-        var_dump($this->db);
     }
 
     public function create($table, $fields) {
@@ -70,6 +69,34 @@ class ORM {
         $query = "SELECT * FROM $table";
         $stmt = $this->db->prepare($query);
         return $stmt->execute();
+    }
+
+    public function find($table, $params = []) {
+        $query = "SELECT * FROM $table";
+
+    if (!empty($params['WHERE'])) {
+        $query .= " WHERE " . $params['WHERE'];
+    }
+
+    if (!empty($params['ORDER BY'])) {
+        $query .= " ORDER BY " . $params['ORDER BY'];
+    }
+
+
+    if (!empty($params['LIMIT'])) {
+        $query .= " LIMIT " . $params['LIMIT'];
+    }
+
+    $stmt = $this->db->prepare($query);
+
+    if (isset($params['params'])) {
+        var_dump($params);
+        foreach ($params['params'] as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+    }
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 
