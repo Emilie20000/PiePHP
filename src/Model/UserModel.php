@@ -2,19 +2,21 @@
 
 namespace Model;
 
+use Core\Entity;
 use Core\ORM;
-use PDO;
 
-class UserModel extends ORM {
+class UserModel extends Entity {
 
+    private $orm;
     private $table = 'users';
-    private $email;
-    private $password;
+    protected $email;
+    protected $password;
 
-    public function __construct($email, $password) {
-        parent::__construct();
-        $this->email = $email;
-        $this->password = $password;
+    public function __construct($data) {
+        parent::__construct($data);
+        $this->orm = new ORM;
+        $this->email = $data['email'];
+        $this->password = $data['password'];
     }
 
     public function createUser() {
@@ -23,10 +25,28 @@ class UserModel extends ORM {
             'password' => $this->password
         ];
 
-        return parent::create($this->table, $fields);
+        return $this->orm->create($this->table, $fields);
     }
     
+    public function readUser() {
 
+    }
+
+    public function upadateUser() {
+
+    }
+
+    public function deleteUser() {
+
+    }
+
+    public function read_allUsers() {
+
+    }
+
+    public function desactiveUser() {
+
+    }
     
 }
 
