@@ -7,6 +7,12 @@ use Model\UserModel;
 
 class UserController extends Controller {
 
+    protected $userModel;
+
+    public function __construct() {
+        parent::__construct();
+    }
+
     public function addAction() {
         $this->render('register');
     }
@@ -18,9 +24,15 @@ class UserController extends Controller {
             $email = $this->request->post('email');
             $password = $this->request->post('password');
 
-            $userModel = new UserModel($email, $password);
+            $data = [
+                'email' => $email,
+                'password' => $password
+            ];
 
-            $register = $userModel->create();
+            $userModel = new UserModel($data);
+
+            $register = $userModel->createUser($data);
+
 
             if ($register) {
                 echo 'Inscription réussie';
