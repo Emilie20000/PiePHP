@@ -2,10 +2,16 @@
 
 use Core\Router;
 
-$router = new Router();
+Router::connect(BASE_URI . '/', ['controller' => 'app',
+                                 'action' => 'index']);
 
-$router->addRoute(BASE_URI . '/', 'UserController@index');
+Router::connect(BASE_URI . '/register', ['controller' => 'user',
+                                         'action' => 'addRegister']);
 
-return $router;
+Router::connect(BASE_URI . '/login', ['controller' => 'user',
+                                         'action' => 'addLogin']);
+
+Router::connect(BASE_URI . '/users', ['controller' => 'user', 
+                                      'action' => 'displayUsers' ]);
 
 ?>
