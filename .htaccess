@@ -1,6 +1,6 @@
 RewriteEngine On
-RewriteBase /Webac/W-PHP-502-LIL-2-1-PiePHP-emilie.le-lan/
+RewriteBase /Webac/PiePHP/
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
-RewriteCond %{REQUEST_URI} !^/Webac/W-PHP-502-LIL-2-1-PiePHP-emilie.le-lan/(webroot/.+|index.php|robots.txt)$
+RewriteCond %{REQUEST_URI} !^/Webac/PiePHP/(webroot/.+|index.php|robots.txt)$
 
 RewriteRule ^ index.php [QSA,L]
