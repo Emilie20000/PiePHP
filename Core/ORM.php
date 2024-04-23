@@ -90,13 +90,47 @@ class ORM {
     $stmt = $this->db->prepare($query);
 
     if (isset($params['params'])) {
-        var_dump($params);
         foreach ($params['params'] as $key => $value) {
             $stmt->bindValue($key, $value);
         }
     }
         $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (isset($params['relations']) && is_array($params['relations'])) {
+            foreach ($params['relations'] as $relation => $model) {
+                $result[$relation] = $this->getRelation($model, 
+                                                          $result['id'], 
+                                                          $relation);
+            }
+        }
+    
+        return $result;
+    }
+
+    public function getRelation($model, $id, $relation) {
+        switch ($relation) {
+            case 'has_one':
+                return $this->hasOne($model, $id);
+            case 'has_many':
+                return $this->hasMany($model, $id);
+        }
+    }
+
+    private function hasOne($model, $id) {
+        $query = "SELECT * FROM $model WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    private function hasMany($model, $id) {
+        $query = "SELECT * FROM $model WHERE {$model}_id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
