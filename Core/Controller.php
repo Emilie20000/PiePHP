@@ -2,11 +2,16 @@
 
 namespace Core;
 
-use Model\UserModel;
+use Core\Request;
 
 class Controller {
 
    protected static $_render;
+   protected $request;
+
+   public function __construct() {
+    $this->request = new Request();
+   }
 
    public function __destruct() {
     echo self::$_render;
