@@ -5,6 +5,9 @@ namespace Core;
 use Core\Database;
 use PDO;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 class ORM {
 
     protected $db;
@@ -30,7 +33,7 @@ class ORM {
 
     public function read($table, $id) {
         $query = "SELECT * FROM $table WHERE id = ?";
-        $stmt = $this->bindParam(1, $id);
+        $stmt = $this->bindValue(1, $id);
 
         $stmt->execute();
 
@@ -65,10 +68,14 @@ class ORM {
         return $stmt->execute();
     }
 
-    public function read_all($table) {
+    public function read_all($table, $model) {
         $query = "SELECT * FROM $table";
+        $query .= $this->getRelation($table, $model);
+        var_dump($query);
         $stmt = $this->db->prepare($query);
-        return $stmt->execute();
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     public function find($table, $params = []) {
@@ -97,40 +104,66 @@ class ORM {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (isset($params['relations']) && is_array($params['relations'])) {
-            foreach ($params['relations'] as $relation => $model) {
-                $result[$relation] = $this->getRelation($model, 
-                                                          $result['id'], 
-                                                          $relation);
-            }
-        }
-    
         return $result;
     }
 
-    public function getRelation($model, $id, $relation) {
-        switch ($relation) {
-            case 'has_one':
-                return $this->hasOne($model, $id);
-            case 'has_many':
-                return $this->hasMany($model, $id);
+    public function getRelation($table, $model) {
+        var_dump($table);
+        if (class_exists($model)) {
+
+            $reflectionClass = new \ReflectionClass($model);
+    
+            if ($reflectionClass->hasProperty('relations')) {
+    
+                $relations = $reflectionClass->getStaticPropertyValue('relations');
+    
+                if (isset($relations['type']) && isset($relations['table'])) {
+    
+                        switch ($relations['type']) {
+                            case 'has_one':
+                                return $this->hasOne($model, $id);
+                            case 'has_many':
+                                $joinQuery = $this->hasMany($table, $relations['table']);
+                                return $joinQuery;
+                                var_dump($joinQuery);
+                        }
+                }
+            }
+        } else {
+
+            return;
         }
+    
     }
 
     private function hasOne($model, $id) {
-        $query = "SELECT * FROM $model WHERE id = ?";
+        $query += "SELECT * FROM $model WHERE id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(1, $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    private function hasMany($model, $id) {
-        $query = "SELECT * FROM $model WHERE {$model}_id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(1, $id);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    private function hasMany($table, $tables) {
+
+        $numTables = count($tables);
+        $join = "";
+        $table1 = $table;
+        
+        for ($i = 0; $i < $numTables; $i++) {
+            
+            $table2 = $tables[$i];
+            
+            $join .= " INNER JOIN $table2 ON {$table1}.id = {$table2}.{$table1}_id";
+
+            if ($i < $numTables - 1) {
+                $table1 = $table2;
+            }
+        }
+        
+        return $join;
+
+        
     }
 }
 
