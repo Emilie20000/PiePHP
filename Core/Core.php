@@ -12,8 +12,7 @@
             require_once(__DIR__ . '/../src/routes.php');
 
             $currentUrl = $_SERVER['REQUEST_URI'];
-
-            $route = Router::get($currentUrl);
+            $route = Router::get($currentUrl) ?? Router::dynamicGet($currentUrl);
 
             if ($route) {
                 $controllerName = ucfirst($route['controller']) . 'Controller';
@@ -33,28 +32,7 @@
                     echo '404';
                 }
             } else {
-                $dynamicRoute = Router::dynamicGet($currentUrl);
-
-                if ($dynamicRoute) {
-                    $controllerName = ucfirst($dynamicRoute['controller']) . 'Controller';
-                    $actionName = $dynamicRoute['action'] . 'Action';
-    
-                    $controller = 'Controller\\' . $controllerName;
-            
-                    if (class_exists($controller)) {
-                        $controllerInstance = new $controller();
-            
-                        if (method_exists($controllerInstance, $actionName)) {
-                            $controllerInstance->$actionName();
-                        } else {
-                            echo '404';
-                        }
-                    } else {
-                        echo '404';
-                    }
-                } else {
-                    echo '404';
-                }
+                echo '404';
             }
         }
     }
