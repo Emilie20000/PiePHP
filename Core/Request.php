@@ -4,26 +4,31 @@ namespace Core;
 
 class Request {
 
-    public static function get($key, $default = null) {
-        return isset($_GET[$key]) ? self::cleanInput($_GET[$key]) : $default;
+    public function __construct() {
+
+        $this->params = $this->secureInput($_REQUEST);
     }
 
-    public static function post($key, $default = null) {
-        return isset($_POST[$key]) ? self::cleanInput($_POST[$key]) : $default;
+    public function getQueryParams() {
+
+        return $this->params;
     }
 
-    private static function cleanInput($value) {
-        if (is_array($value)) {
-            return array_map('self::cleanInput', $value);
+    private function secureInput() {
+
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->secureInput($value);
+            }
         } else {
-            $value = trim($value);
-            $value = stripcslashes($value);
-            $value = htmlspecialchars($value);
 
-            return $value;
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
         }
-    }
 
+        return $data;
+    }
 }
 
 ?>
