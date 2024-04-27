@@ -6,12 +6,12 @@ Router::connect(BASE_URI . '/', ['controller' => 'app',
                                  'action' => 'index']);
 
 Router::connect(BASE_URI . '/register', ['controller' => 'user',
-                                         'action' => 'addRegister']);
+                                         'action' => 'register']);
 
 Router::connect(BASE_URI . '/login', ['controller' => 'user',
-                                         'action' => 'addLogin']);
+                                         'action' => 'login']);
 
-Router::connect(BASE_URI . '/users', ['controller' => 'user', 
-                                      'action' => 'displayUsers' ]);
+Router::connect(BASE_URI . '/user/{id}', ['controller' => 'user', 
+                                      'action' => 'show']);
 
 ?>

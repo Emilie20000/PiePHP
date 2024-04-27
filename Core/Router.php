@@ -17,6 +17,18 @@ class Router {
 
             return $route;
         }
+
+        foreach (self::$routes as $routeUrl => $routeParams) {
+        
+            $routePattern = preg_replace('/\//', '\/', $routeUrl);
+            $routePattern = preg_replace('/\{id\}/', '([0-9]+)', $routePattern);
+            $routePattern = '/^' . $routePattern . '$/';
+
+            if (preg_match($routePattern, $url)) {
+                return $routeParams;
+            }
+
+        }
     }
 
     public static function dynamicGet($url) {
