@@ -27,6 +27,12 @@ class UserModel extends Entity {
         }
     }
 
+    public function __set($attribut, $valeur) {
+        if (property_exists($this, $attribut)) {
+            $this->$attribut = $valeur;
+        }
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -85,6 +91,7 @@ class UserModel extends Entity {
         $user = $this->orm->find($this->table, $params);
 
         if ($user) {
+            
             $this->setId($user['id']);
             $this->setFirstname($user['firstname']);
             $this->setLastname($user['lastname']);
@@ -120,6 +127,10 @@ class UserModel extends Entity {
     
     public function readUser() {
 
+        $id = $this->id;
+        $user = $this->orm->read($this->table, __CLASS__, $id);
+    
+        return $user;
     }
 
     public function upadateUser() {

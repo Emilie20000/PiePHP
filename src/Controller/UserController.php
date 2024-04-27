@@ -18,9 +18,6 @@ class UserController extends Controller {
         
     }
 
-    public function indexAction() {
-        $this->render('index');
-    }
 
     public function registerAction() {
 
@@ -58,7 +55,7 @@ class UserController extends Controller {
                 $this->createSession('lastname', $user->lastname);
                 $this->createSession('birthdate', $user->birthdate);
                 $this->createSession('email', $user->email);
-                
+                header("Location: " . BASE_URI . "/user/{$user->id}");
                 echo 'Inscription réussie';
             } else {
                 echo 'Cet email est déjà associé à un compte';
@@ -79,24 +76,35 @@ class UserController extends Controller {
 
             if ($user->id && SecurityUtils::verifyPassword($params['password'], 
                                                         $user->password)) {
-                session_start();
+               
                 $this->createSession('id', $user->id);
-                $this->createSession('firstname', $user->firstname);
-                $this->createSession('lastname', $user->lastname);
-                $this->createSession('birthdate', $user->birthdate);
-                $this->createSession('email', $user->email);
-                echo 'Bienvenue ' . $_SESSION['firstname'];
+                $this->redirect('/user/' . $user->id);
+                
             } else {
                 echo 'Email ou mot de passe incorrect';
                 return false;
             }
 
-            
-
         }
+    }
 
+    public function indexAction($id) {
+       
+        $user = new UserModel([]);
+        $user->id = $id;
+        $data = $user->readUser();
+
+        $this->render('index', ['user' => $data]);
     }
     
+    public function showAction($id) {
+       
+        $user = new UserModel([]);
+        $user->id = $id;
+        $data = $user->readUser();
+
+        $this->render('show', ['user' => $data]);
+    }
 }
 
 ?>
