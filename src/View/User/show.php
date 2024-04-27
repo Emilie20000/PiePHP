@@ -13,5 +13,8 @@
         <p>Email: <?= $userInfo['email'] ?></p>
        
     <?php endforeach; ?>
+    <a href="<?= BASE_URI ?>/user/update/<?= $userInfo['id'] ?>">Modifier mon profile</a>
+    <a href="<?= BASE_URI ?>/user/delete/<?= $userInfo['id'] ?>">Supprimer mon profil</a>
+
 </body>
 </html>
