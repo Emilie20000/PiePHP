@@ -138,16 +138,15 @@ class UserModel extends Entity {
     }
 
     public function deleteUser() {
-
+        $id = $this->id;
+        $delete = $this->orm->delete($this->table, $id);
+        return $delete;
     }
 
     public function read_allUsers() {
 
     }
 
-    public function desactiveUser() {
-
-    }
 
     public function findUser() {
 

@@ -90,7 +90,7 @@ class UserController extends Controller {
 
     public function indexAction($id) {
        
-        $user = new UserModel([]);
+        $user = new UserModel(['id' => $id]);
         $user->id = $id;
         $data = $user->readUser();
 
@@ -99,11 +99,24 @@ class UserController extends Controller {
     
     public function showAction($id) {
        
-        $user = new UserModel([]);
+        $user = new UserModel(['id' => $id]);;
         $user->id = $id;
         $data = $user->readUser();
 
         $this->render('show', ['user' => $data]);
+    }
+
+    public function updateAction($id) {
+
+    }
+
+    public function deleteAction($id) {
+        $user = new UserModel(['id' => $id]);;
+        $user->id = $id;
+        $delete = $user->deleteUser();
+        if ($delete) {
+            $this->redirect('/');
+        }
     }
 }
 
