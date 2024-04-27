@@ -24,7 +24,8 @@ class Router {
             $routePattern = preg_replace('/\{id\}/', '([0-9]+)', $routePattern);
             $routePattern = '/^' . $routePattern . '$/';
 
-            if (preg_match($routePattern, $url)) {
+            if (preg_match($routePattern, $url, $matches)) {
+                $routeParams['params']['id'] = $matches[1];
                 return $routeParams;
             }
 
@@ -45,6 +46,35 @@ class Router {
         : 'index';
     
         return ['controller' => $controllerName, 'action' => $actionName];
+    }
+
+    public static function dispatch($route) {
+        $controllerName = ucfirst($route['controller']) . 'Controller';
+        $actionName = $route['action'] . 'Action';
+
+        $controller = 'Controller\\' . $controllerName;
+
+        if (class_exists($controller)) {
+            $controllerInstance = new $controller();
+
+            if (method_exists($controllerInstance, $actionName)) {
+                $reflectionMethod = new \ReflectionMethod(
+                    $controllerInstance,
+                    $actionName
+                );
+
+                $parameters = $reflectionMethod->getParameters();
+                if (count($parameters) > 0) {
+                    $controllerInstance->$actionName($route['params']['id']);
+                } else {
+                    $controllerInstance->$actionName();
+                }
+            } else {
+                echo '404';
+            }
+        } else {
+            echo '404';
+        }
     }
 }   
 
