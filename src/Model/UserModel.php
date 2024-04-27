@@ -133,8 +133,22 @@ class UserModel extends Entity {
         return $user;
     }
 
-    public function upadateUser() {
+    public function updateUser() {
+        $id = $this->id;
+        var_dump($this->email);
+        if (!empty($this->email)) {
+            var_dump($this->email);
+            $update = $this->orm->update($this->table, $id, 
+                                        'email', $this->email);
+            return $update;
+        }
 
+        if (!empty($this->password)) {
+            $this->password = SecurityUtils::hashPassword($this->password);
+            $update = $this->orm->update($this->table, $id, 
+                                        'password', $this->password);
+            return $update;
+        }
     }
 
     public function deleteUser() {
@@ -145,20 +159,6 @@ class UserModel extends Entity {
 
     public function read_allUsers() {
 
-    }
-
-
-    public function findUser() {
-
-        $params = [
-            'WHERE' => 'email = :email'
-        ];
-
-        $email = $this->email;
-
-        $params['params'] = [':email' => $email];
-
-        return $this->orm->find($this->table, $params);
     }
     
 }

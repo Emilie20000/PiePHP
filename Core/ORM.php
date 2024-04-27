@@ -27,44 +27,55 @@ class ORM {
             $stmt->bindValue(":$key", $value);
         }
     
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
+        }
     }
     
 
-    public function read($table, $id) {
-        $query = "SELECT * FROM $table WHERE id = ?";
-        $stmt = $this->bindValue(1, $id);
+    public function read($table, $model, $id) {
+    
+       
+        $relation = $this->getRelation($table, $model);
+        if ($relation) {
+            $query = $relation;
+            
+        } else {
+            $query = "SELECT * FROM $table 
+                        WHERE id = :id";
+        }
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
 
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $result;
+
+        var_dump($result);
     }
 
-    public function update($table, $id, $fields) {
-        $setFields = [];
-        $params = [];
-
-        foreach ($fields as $key => $value) {
-            $setFields[] = "$key = ?";
-            $params[] = $value;
-        }
-
-        $params[] = $id;
-
-        $setFields = implode(', ', $setFields);
-        $query = "UPDATE $table SET $setFields WHERE id = ?";
-
+    public function update($table, $id, $field, $value) {
+        
+        $query = "UPDATE $table SET $field = :value WHERE id = :id";
+        var_dump($query);
+        var_dump($id);
         $stmt = $this->db->prepare($query);
-        $stmt->execute($params);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':value', $value);
+        $stmt->execute();
 
         return $stmt->rowCount() > 0;
     }
 
     public function delete($table, $id) {
-        $query = "DELETE FROM $table WHERE id = ?";
+        $query = "DELETE FROM $table WHERE id = :id";
+        var_dump($query);
         $stmt = $this->db->prepare($query);
 
-        $stmt->bindValue(1, $id);
+        $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
 
@@ -78,7 +89,7 @@ class ORM {
         return $result;
     }
 
-    public function find($table, $params = []) {
+    public function find($table, $params) {
         $query = "SELECT * FROM $table";
 
     if (!empty($params['WHERE'])) {
@@ -108,7 +119,7 @@ class ORM {
     }
 
     public function getRelation($table, $model) {
-        var_dump($table);
+    
         if (class_exists($model)) {
 
             $reflectionClass = new \ReflectionClass($model);
@@ -137,7 +148,7 @@ class ORM {
     }
 
     private function hasOne($model, $id) {
-        $query += "SELECT * FROM $model WHERE id = ?";
+        $query = "SELECT * FROM $model WHERE id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(1, $id);
         $stmt->execute();
@@ -154,14 +165,16 @@ class ORM {
             
             $table2 = $tables[$i];
             
-            $join .= " INNER JOIN $table2 ON {$table1}.id = {$table2}.{$table1}_id";
+            $query = "SELECT $table1.*, $table2.* FROM $table1
+                        INNER JOIN $table2 ON {$table1}.id = {$table2}.{$table1}_id 
+                        WHERE {$table1}.id = :id";
 
             if ($i < $numTables - 1) {
                 $table1 = $table2;
             }
         }
         
-        return $join;
+        return $query;
 
         
     }

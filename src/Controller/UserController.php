@@ -71,8 +71,11 @@ class UserController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $params = $this->request->getQueryParams();
+            var_dump($params);
             $user = new UserModel($params);
             $user->findByEmail();
+
+            var_dump($user->id);
 
             if ($user->id && SecurityUtils::verifyPassword($params['password'], 
                                                         $user->password)) {
@@ -107,7 +110,23 @@ class UserController extends Controller {
     }
 
     public function updateAction($id) {
-
+        $this->render('update');
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $params = $this->request->getQueryParams();
+            $params['id'] = $id;
+            $user = new UserModel($params);
+            var_dump($params);
+            if (!empty($params['email'])) {
+              
+                    $update = $user->updateUser();
+                    $this->redirect('/user/show/' . $id);
+                
+            } else {
+                $update = $user->updateUser();
+            }
+            
+        }
     }
 
     public function deleteAction($id) {
