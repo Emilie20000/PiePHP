@@ -46,11 +46,19 @@ class UserController extends Controller {
             }
 
             unset($params['confirm_password']);
-            $userModel = new UserModel($params);
-            $user = $userModel->findByEmail();
+            $user = new UserModel($params);
+            $user->findByEmail();
 
-            if (!$userModel->id) {
-                $userModel->createUser();
+            if (!$user->id) {
+                
+                $user->createUser();
+                session_start();
+                $this->createSession('id', $user->id);
+                $this->createSession('firstname', $user->firstname);
+                $this->createSession('lastname', $user->lastname);
+                $this->createSession('birthdate', $user->birthdate);
+                $this->createSession('email', $user->email);
+                
                 echo 'Inscription réussie';
             } else {
                 echo 'Cet email est déjà associé à un compte';
@@ -60,25 +68,30 @@ class UserController extends Controller {
     }
 
     public function loginAction() {
+
+        $this->render('login');
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $email = $this->request->post('email');
-            $password = $this->request->post('password');
+            $params = $this->request->getQueryParams();
+            $user = new UserModel($params);
+            $user->findByEmail();
 
-            $data = [
-                'email' => $email,
-                'password' => $password
-            ];
-
-            $userModel = new UserModel($data);
-
-            $user = $userModel->findUser($data);
-
-            if ($user && $data['password'] === $user['password']) {
-                echo 'Bienvenue' . $user['email'];
+            if ($user->id && SecurityUtils::verifyPassword($params['password'], 
+                                                        $user->password)) {
+                session_start();
+                $this->createSession('id', $user->id);
+                $this->createSession('firstname', $user->firstname);
+                $this->createSession('lastname', $user->lastname);
+                $this->createSession('birthdate', $user->birthdate);
+                $this->createSession('email', $user->email);
+                echo 'Bienvenue ' . $_SESSION['firstname'];
             } else {
-                echo 'Erreur lors de la connexion';
+                echo 'Email ou mot de passe incorrect';
+                return false;
             }
+
+            
 
         }
 

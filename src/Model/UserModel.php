@@ -10,20 +10,20 @@ class UserModel extends Entity {
 
     private $table = 'user';
     private $id;
-    protected $firstname;
-    protected $lastname;
-    protected $birthdate;
-    protected $email;
-    protected $password;
+    private $firstname;
+    private $lastname;
+    private $birthdate;
+    private $email;
+    private $password;
 
     public function __construct($data) {
         parent::__construct($data);
-        
+        $this->data = $data; 
     }
 
     public function __get($attribut) {
-        if ($attribut === 'id') {
-            return $this->getId();
+        if (property_exists($this, $attribut)) {
+            return $this->$attribut;
         }
     }
 
@@ -33,6 +33,46 @@ class UserModel extends Entity {
 
     public function setId($id) {
         $this->id = $id;
+    }
+
+    public function getFirstname() {
+        return $this->firstname;
+    }
+
+    public function setFirstname($firstname) {
+        $this->firstname = $firstname;
+    }
+
+    public function getLastname() {
+        return $this->lastname;
+    }
+
+    public function setLastname($lastname) {
+        $this->lastname = $lastname;
+    }
+
+    public function getBirthdate() {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate($birthdate) {
+        $this->birthdate = $birthdate;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function setPassword($password) {
+        $this->password = $password;
     }
 
     public function findByEmail() {
@@ -46,6 +86,11 @@ class UserModel extends Entity {
 
         if ($user) {
             $this->setId($user['id']);
+            $this->setFirstname($user['firstname']);
+            $this->setLastname($user['lastname']);
+            $this->setBirthdate($user['birthdate']);
+            $this->setEmail($user['email']);
+            $this->setPassword($user['password']);
         }
     
         return $user;
@@ -64,7 +109,13 @@ class UserModel extends Entity {
 
         var_dump($fields);
 
-        return $this->orm->create($this->table, $fields);
+        $userId = $this->orm->create($this->table, $fields);
+
+        if ($userId) {
+            $this->setId($userId);
+        }
+
+        
     }
     
     public function readUser() {
