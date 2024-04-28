@@ -12,7 +12,7 @@
             require_once(__DIR__ . '/../src/routes.php');
 
             $currentUrl = $_SERVER['REQUEST_URI'];
-            var_dump($currentUrl);
+       
             $route = Router::get($currentUrl) ?? Router::dynamicGet($currentUrl);
 
             if ($route) {
