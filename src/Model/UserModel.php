@@ -157,9 +157,6 @@ class UserModel extends Entity {
         return $delete;
     }
 
-    public function read_allUsers() {
-
-    }
     
 }
 

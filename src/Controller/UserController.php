@@ -137,6 +137,14 @@ class UserController extends Controller {
             $this->redirect('/');
         }
     }
+
+    public function logoutAction($id) {
+        session_unset();
+        session_destroy();
+        
+        $this->redirect('/');
+        
+    }
 }
 
 ?>
