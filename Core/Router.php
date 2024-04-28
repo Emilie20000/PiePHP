@@ -52,6 +52,8 @@ class Router {
         $controllerName = ucfirst($route['controller']) . 'Controller';
         $actionName = $route['action'] . 'Action';
 
+        
+
         $controller = 'Controller\\' . $controllerName;
 
         if (class_exists($controller)) {
@@ -62,6 +64,7 @@ class Router {
                     $controllerInstance,
                     $actionName
                 );
+
 
                 $parameters = $reflectionMethod->getParameters();
                 if (count($parameters) > 0) {
