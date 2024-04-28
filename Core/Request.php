@@ -14,7 +14,7 @@ class Request {
         return $this->params;
     }
 
-    private function secureInput() {
+    private function secureInput($data) {
 
         if (is_array($data)) {
             foreach ($data as $key => $value) {
