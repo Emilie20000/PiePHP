@@ -6,7 +6,7 @@
     <title>My cinema</title>
 </head>
 <body>
-    <h1>Bienvenue dans piePHP</h1>
+    <h1>Bienvenue dans My Cinema by piePHP</h1>
     <a href="<?= BASE_URI ?>/register<?= $userInfo['id'] ?>">S'inscrire</a>
     <a href="<?= BASE_URI ?>/login">Se connecter</a>
   

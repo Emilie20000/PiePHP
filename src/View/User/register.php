@@ -9,7 +9,7 @@
 </head>
 <body>
             <div class="">
-                <form action="user/register" method="post" name="register_form" id="registerForm" class="">
+                <form action="" method="post" name="register_form" id="registerForm" class="">
                     <div class="">
                         <h2 class="">Inscription</h2>
                     </div>

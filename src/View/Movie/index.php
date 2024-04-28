@@ -7,7 +7,6 @@
 </head>
 <body>
     <h1>Liste des films</h1>
-    <td><a href="<?= BASE_URI ?>/movie/add/">Ajouter un film</a></td>
     <table>
         <thead>
             <tr>
@@ -17,7 +16,6 @@
                 <th>Date de réalisation</th>
                 <th>Age minimum</th>
                 <th>Détails</th>
-                <th>Modifier</th>
                 <th>Supprimer</th>
             </tr>
         </thead>
@@ -30,7 +28,6 @@
                     <td><?= date('d-m-Y', strtotime($movie['release_date'])) ?></td>
                     <td><?= $movie['rating'] ?></td>
                     <td><a href="<?= BASE_URI ?>/movie/show/<?= $movie['id'] ?>">Détails du film</a></td>
-                    <td><a href="<?= BASE_URI ?>/movie/update/<?= $movie['id'] ?>">Modifier le titre</a></td>
                     <td><a href="<?= BASE_URI ?>/movie/delete/<?= $movie['id'] ?>">Supprimer un film</a></td>
                 </tr>
             <?php endforeach; ?>

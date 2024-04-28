@@ -6,7 +6,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="user/login" method="post">
+    <form action="" method="post">
         <div class="">
             <h2 class="">Connexion</h2>
         </div> 

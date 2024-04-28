@@ -26,13 +26,12 @@ class UserController extends Controller {
             if (!SecurityUtils::passwordMatch($params['password'], 
                                               $params['confirm_password'])) {
                 echo 'Les mots de passe ne correspondent pas';
-                $this->redirect('/register');
                 
                 return false;
             }
 
             if (!SecurityUtils::securePassword($params['password'])) {
-                $this->redirect('/register');
+
                 echo 'Le mot de passe doit mesurer au moins 8 caratères et contenir : 
                         - des lettre majuscules et minuscule
                         - des chiffres
@@ -60,7 +59,7 @@ class UserController extends Controller {
                 $this->redirect('/user/' . $user->id);
             } else {
                 echo 'Cet email est déjà associé à un compte';
-                $this->redirect('/register');
+                
                 
             }
 
