@@ -45,6 +45,10 @@ Router::connect(BASE_URI . '/distributor', ['controller' => 'distributor',
 Router::connect(BASE_URI . '/distributor/show/{id}', ['controller' => 'distributor',
                                         'action' => 'show']);
 
+Router::connect(BASE_URI . '/distributor/add', ['controller' => 'distributor',
+                                        'action' => 'add']);
+
+
 
 
 

@@ -35,9 +35,25 @@ class DistributorController extends Controller {
         $this->render('show', ['distributor' => $data]);
     }
 
-    public function deleteAction($id) {
+    public function addAction($id) {
+        $this->render('add');
 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $params = $this->request->getQueryParams();
+           
+            $distributor = new DistributorModel($params);
+            var_dump($params);
+            $distributor->createDistributor();
+
+            if ($distributor->id) {
+                $this->redirect('/distributor/show/' . $distributor->id);
+            }
+        }
+
+      
     }
+
+
 
 }
 

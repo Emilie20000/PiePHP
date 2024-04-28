@@ -50,7 +50,7 @@ class MovieController extends Controller {
             $params = $this->request->getQueryParams();
             $params['relation_id'] = $id;
             $movie = new MovieModel($params);
-            var_dump($params);
+          
             $movie->createMovie();
 
             if ($movie->id) {

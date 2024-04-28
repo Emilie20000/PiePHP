@@ -35,6 +35,18 @@ class DistributorModel extends Entity {
         }
     }
 
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setCountry($country) {
+        $this->country = $country;
+    }
+
     public function readDistributor() {
         $id = $this->id;
         $distributor = $this->orm->read($this->table, static::class, $id);
@@ -48,6 +60,20 @@ class DistributorModel extends Entity {
         return $distributor;
     }
 
+    public function createDistributor() {
+        $fields = [
+            'name' => $this->name,
+            'country' => $this->country
+        ];
+
+    
+        $distributorId = $this->orm->create($this->table, $fields);
+
+        if ($distributorId) {
+            $this->setId($distributorId);
+        }
+
+    }
 }
 
 ?>

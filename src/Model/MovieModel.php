@@ -94,7 +94,6 @@ class MovieModel extends Entity {
             'rating' => $this->rating
         ];
 
-        var_dump($fields);
 
         $movieId = $this->orm->create($this->table, $fields);
 
