@@ -7,5 +7,6 @@
 </head>
 <body>
     <h1>Ajouter un film</h1>
+    
 </body>
 </html>

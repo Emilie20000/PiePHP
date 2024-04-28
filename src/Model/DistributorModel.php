@@ -4,18 +4,18 @@ namespace Model;
 
 use Core\Entity;
 
-class MovieModel extends Entity {
+class DistributorModel extends Entity {
 
-    private $table = 'movie';
+    private $table = 'distributor';
     private $id;
-    private $title;
-    private $director;
-    private $duration;
-    private $release_date;
-    private $rating;
+    private $name;
+    private $phone;
+    private $zipcode;
+    private $city;
+    private $country;
     private static $relations = [
-        'type' => 'has_one',
-        'table' => 'distributor'
+        'type' => 'has_many',
+        'table' => 'movie'
     ];
 
     public function __construct($data) {
@@ -35,27 +35,13 @@ class MovieModel extends Entity {
         }
     }
 
-    public function read_allMovies() {
-
-        $movies = $this->orm->read_all($this->table, __CLASS__);
-        return $movies;
-    }
-
-    public function readMovie() {
+    public function readDistributor() {
         $id = $this->id;
-        $model = static::class;
         $movie = $this->orm->read($this->table, static::class, $id);
     
         return $movie;
     }
 
-    public function deleteMovie() {
-        $id = $this->id;
-        $delete = $this->orm->delete($this->table, $id);
-        return $delete;
-    }
-
 }
-
 
 ?>

@@ -7,14 +7,15 @@
 </head>
 <body>
 <?php foreach ($user as $userInfo) : ?>
-        <p>User ID: <?= $userInfo['id'] ?></p>
-        <p>First Name: <?= $userInfo['firstname'] ?></p>
-        <p>Last Name: <?= $userInfo['lastname'] ?></p>
-        <p>Email: <?= $userInfo['email'] ?></p>
+        <p><strong>Prénom : </strong> <?= $userInfo['firstname'] ?></p>
+        <p><strong>Nom : </strong> <?= $userInfo['lastname'] ?></p>
+        <p><strong>Email : </strong> <?= $userInfo['email'] ?></p>
+        <p><strong>Anniversaire : </strong> <?= date('d-m-Y', strtotime($userInfo['birthdate'])) ?></ ?></p>
        
     <?php endforeach; ?>
     <a href="<?= BASE_URI ?>/user/update/<?= $userInfo['id'] ?>">Modifier mon profile</a>
     <a href="<?= BASE_URI ?>/user/delete/<?= $userInfo['id'] ?>">Supprimer mon profil</a>
+    <a href="<?= BASE_URI ?>/user/logout/<?= $userInfo['id'] ?>">Déconnexion</a>
 
 </body>
 </html>

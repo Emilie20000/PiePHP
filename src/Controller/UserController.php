@@ -6,18 +6,13 @@ use Core\Controller;
 use Core\SecurityUtils;
 use Model\UserModel;
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 class UserController extends Controller {
-
-    protected $userModel;
 
     public function __construct() {
         parent::__construct();
         
     }
-
 
     public function registerAction() {
 
@@ -124,6 +119,7 @@ class UserController extends Controller {
                 
             } else {
                 $update = $user->updateUser();
+                $this->redirect('/user/show/' . $id);
             }
             
         }

@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../webroot/css/style.css">
     <title>Inscription</title>
+    
 </head>
 <body>
             <div class="">
@@ -33,8 +35,11 @@
                     </div>
                     <div class="">
                         <label for="password">Confirmation du mot passe :</label>
-                        <input class="" type="password" name="confirmPassword" id="confirmPassword" required>
+                        <input class="" type="password" name="confirm_password" id="confirmPassword" required>
                     </div>
+                    <?php if (!empty($message)) : ?>
+                    <p>{{ message }}</p>
+                    <?php endif; ?>
                     <div class="">
                         <button class="" id="register">S'inscrire</button>
                     </div>

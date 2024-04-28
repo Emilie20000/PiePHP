@@ -11,7 +11,7 @@
         <h1><?php echo $film['title']; ?></h1>
         <p><strong>Réalisateur:</strong> <?php echo $film['director']; ?></p>
         <p><strong>Durée:</strong> <?php echo $film['duration']; ?> minutes</p>
-        <p><strong>Date de sortie:</strong> <?php echo $film['release_date']; ?></p>
+        <p><strong>Date de sortie:</strong><?= date('d-m-Y', strtotime($film['release_date'])) ?></p>
         <p><strong>Age minimum:</strong> <?php echo $film['rating']; ?></p>
     <?php endforeach; ?>
 

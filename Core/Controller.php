@@ -12,7 +12,6 @@ class Controller {
 
    public function __construct() {
     $this->request = new Request();
-    $this->templateEngine = new TemplateEngine();
    }
 
    public function __destruct() {

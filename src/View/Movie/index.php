@@ -7,12 +7,18 @@
 </head>
 <body>
     <h1>Liste des films</h1>
+    <td><a href="<?= BASE_URI ?>/movie/add/">Ajouter un film</a></td>
     <table>
         <thead>
             <tr>
-                <th>Titre du film</th>
+                <th>Titre</th>
                 <th>Réalisateur</th>
-                <th>Distributeur</th>
+                <th>Durée</th>
+                <th>Date de réalisation</th>
+                <th>Age minimum</th>
+                <th>Détails</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +26,12 @@
                 <tr>
                     <td><?= $movie['title'] ?></td>
                     <td><?= $movie['director'] ?></td>
-                    <td><?= $movie['name'] ?></td>
+                    <td><?= $movie['duration'] ?></td>
+                    <td><?= date('d-m-Y', strtotime($movie['release_date'])) ?></td>
+                    <td><?= $movie['rating'] ?></td>
+                    <td><a href="<?= BASE_URI ?>/movie/show/<?= $movie['id'] ?>">Détails du film</a></td>
+                    <td><a href="<?= BASE_URI ?>/movie/update/<?= $movie['id'] ?>">Modifier le titre</a></td>
+                    <td><a href="<?= BASE_URI ?>/movie/delete/<?= $movie['id'] ?>">Supprimer un film</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
