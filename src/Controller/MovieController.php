@@ -16,16 +16,22 @@ class MovieController extends Controller {
 
         $movie = new MovieModel([]);
         $movies = $movie->read_allMovies();
+
         $currentPage = 1;
         $perPage = 50;
         $pagination = $this->paginator($currentPage, $perPage, count($movies));
+     
         $this->render('index', ['movies' => $movies, 
                                 'pagination' => $pagination]);
 
     }
 
     public function showAction($id) {
-
+        $movie = new MovieModel(['id' => $id]);;
+        $movie->id = $id;
+        $data = $movie->readMovie();
+     
+        $this->render('show', ['movie' => $data]);
     }
 
     public function deleteAction($id) {

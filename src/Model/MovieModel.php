@@ -43,6 +43,14 @@ class MovieModel extends Entity {
         return $movies;
     }
 
+    public function readMovie() {
+        $id = $this->id;
+        $model = static::class;
+        $movie = $this->orm->read($this->table, static::class, $id);
+    
+        return $movie;
+    }
+
 }
 
 
