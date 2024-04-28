@@ -5,9 +5,6 @@ namespace Core;
 use Core\Database;
 use PDO;
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 class ORM {
 
     protected $db;
@@ -34,28 +31,30 @@ class ORM {
     
 
     public function read($table, $model, $id) {
-    
        
-        $relation = $this->getRelation($table, $model);
-        if ($relation) {
-            $query = $relation;
-            
-        } else {
-            $query = "SELECT * FROM $table 
-                        WHERE id = :id";
-        }
-
+        $query = "SELECT * FROM $table WHERE id = :id";
+    
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id);
 
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        return $result;
+        $relation = $this->getRelation($table, $model, $id); 
+    
+            if ($relation) {
+                
+                $data = [];
+                $data['main'] = $result;
+                $data['relation'] = $relation;
+                return $data;
+                
+            }  else {
+                return $result;
+            }
 
-        var_dump($result);
-    }
+        }
+
 
     public function update($table, $id, $field, $value) {
         
@@ -80,12 +79,12 @@ class ORM {
     }
 
     public function read_all($table, $model) {
+        
         $query = "SELECT * FROM $table";
-        $query .= $this->getRelation($table, $model);
-        var_dump($query);
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return $result;
     }
 
@@ -99,7 +98,6 @@ class ORM {
     if (!empty($params['ORDER BY'])) {
         $query .= " ORDER BY " . $params['ORDER BY'];
     }
-
 
     if (!empty($params['LIMIT'])) {
         $query .= " LIMIT " . $params['LIMIT'];
@@ -118,7 +116,7 @@ class ORM {
         return $result;
     }
 
-    public function getRelation($table, $model) {
+    public function getRelation($table, $model, $id) {
     
         if (class_exists($model)) {
 
@@ -127,19 +125,17 @@ class ORM {
             if ($reflectionClass->hasProperty('relations')) {
     
                 $relations = $reflectionClass->getStaticPropertyValue('relations');
-    
+              
                 if (isset($relations['type']) && isset($relations['table'])) {
     
                         switch ($relations['type']) {
                             case 'has_one':
-                                return $this->hasOne($model, $id);
+                                return $this->hasOne($table, $relations['table'], $id);
                             case 'has_many':
-                                $joinQuery = $this->hasMany($table, $relations['table']);
-                                return $joinQuery;
-                                var_dump($joinQuery);
+                                return $this->hasMany($table, $relations['table'], $id);
                         }
-                }
-            }
+                    }
+                 }
         } else {
 
             return;
@@ -147,35 +143,33 @@ class ORM {
     
     }
 
-    private function hasOne($model, $id) {
-        $query = "SELECT * FROM $model WHERE id = ?";
+    private function hasOne($table1, $table2, $id) {
+        $query = "SELECT  $table2.*
+                    FROM $table2
+                    INNER JOIN $table1 
+                    ON {$table2}.id = {$table1}.id_{$table2}
+                    WHERE {$table1}.id = :id";
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(1, $id);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+
     }
 
-    private function hasMany($table, $tables) {
+    private function hasMany($table1, $table2, $id) {
+        $query = "SELECT {$table2}.*
+            FROM {$table1}
+            INNER JOIN {$table2} 
+            ON {$table1}.id = {$table2}.id_{$table1}
+            WHERE {$table1}.id = :id";
 
-        $numTables = count($tables);
-        $join = "";
-        $table1 = $table;
-        
-        for ($i = 0; $i < $numTables; $i++) {
-            
-            $table2 = $tables[$i];
-            
-            $query = "SELECT $table1.*, $table2.* FROM $table1
-                        INNER JOIN $table2 ON {$table1}.id = {$table2}.{$table1}_id 
-                        WHERE {$table1}.id = :id";
-
-            if ($i < $numTables - 1) {
-                $table1 = $table2;
-            }
-        }
-        
-        return $query;
-
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $result;
         
     }
 }
