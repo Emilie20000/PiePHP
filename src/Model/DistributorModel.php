@@ -37,9 +37,15 @@ class DistributorModel extends Entity {
 
     public function readDistributor() {
         $id = $this->id;
-        $movie = $this->orm->read($this->table, static::class, $id);
+        $distributor = $this->orm->read($this->table, static::class, $id);
     
-        return $movie;
+        return $distributor;
+    }
+
+    public function read_allDistributors() {
+
+        $distributor = $this->orm->read_all($this->table, static::class);
+        return $distributor;
     }
 
 }

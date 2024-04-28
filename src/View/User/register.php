@@ -37,9 +37,7 @@
                         <label for="password">Confirmation du mot passe :</label>
                         <input class="" type="password" name="confirm_password" id="confirmPassword" required>
                     </div>
-                    <?php if (!empty($message)) : ?>
-                    <p>{{ message }}</p>
-                    <?php endif; ?>
+                    
                     <div class="">
                         <button class="" id="register">S'inscrire</button>
                     </div>

@@ -5,6 +5,7 @@ namespace Controller;
 use Core\Controller;
 use Model\DistributorModel;
 
+
 class DistributorController extends Controller {
 
     public function __construct() {
@@ -14,14 +15,14 @@ class DistributorController extends Controller {
 
     public function indexAction() {
 
-        $distributor = new MovieModel([]);
-        $distributor = $movie->read_allMovies();
-
+        $distributor = new DistributorModel([]);
+        $distributors = $distributor->read_allDistributors();
+    
         $currentPage = 1;
         $perPage = 50;
-        $pagination = $this->paginator($currentPage, $perPage, count($distributor));
+        $pagination = $this->paginator($currentPage, $perPage, count($distributors));
      
-        $this->render('index', ['distributor' => $distributor, 
+        $this->render('index', ['distributors' => $distributors, 
                                 'pagination' => $pagination]);
 
     }

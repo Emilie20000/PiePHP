@@ -17,9 +17,7 @@
             <div id="" class="nav__items">
                     <h2 class="nav__title"><a href="<?= BASE_URI ?>/">Accueil</a></h2>
                 </div>
-            <div id="" class="nav__items">
-                <h2 class="nav__title"><a href="<?= BASE_URI ?>/user">Mon compte</a></h2>
-            </div>
+
             <div id="" class="nav__items">
                 <h2 class="nav__title"><a href="<?= BASE_URI ?>/movie">Films</a></h2>
             </div>

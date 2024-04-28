@@ -26,14 +26,19 @@ class UserController extends Controller {
             if (!SecurityUtils::passwordMatch($params['password'], 
                                               $params['confirm_password'])) {
                 echo 'Les mots de passe ne correspondent pas';
+                $this->redirect('/register');
+                
                 return false;
             }
 
             if (!SecurityUtils::securePassword($params['password'])) {
+                $this->redirect('/register');
                 echo 'Le mot de passe doit mesurer au moins 8 caratères et contenir : 
                         - des lettre majuscules et minuscule
                         - des chiffres
                         - des caractères spéciaux';
+                
+                
                 return false;
             }
 
@@ -50,10 +55,13 @@ class UserController extends Controller {
                 $this->createSession('lastname', $user->lastname);
                 $this->createSession('birthdate', $user->birthdate);
                 $this->createSession('email', $user->email);
-                header("Location: " . BASE_URI . "/user/{$user->id}");
+               
                 echo 'Inscription réussie';
+                $this->redirect('/user/' . $user->id);
             } else {
                 echo 'Cet email est déjà associé à un compte';
+                $this->redirect('/register');
+                
             }
 
         }
@@ -70,7 +78,6 @@ class UserController extends Controller {
             $user = new UserModel($params);
             $user->findByEmail();
 
-            var_dump($user->id);
 
             if ($user->id && SecurityUtils::verifyPassword($params['password'], 
                                                         $user->password)) {
@@ -80,7 +87,7 @@ class UserController extends Controller {
                 
             } else {
                 echo 'Email ou mot de passe incorrect';
-                return false;
+                $this->redirect('/login');
             }
 
         }

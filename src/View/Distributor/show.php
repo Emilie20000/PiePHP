@@ -17,7 +17,7 @@
             <th>Réalisateur</th>
             <th>Durée</th>
             <th>Date de sortie</th>
-            <th>Classification</th>
+            <th>Age minimum</th>
         </tr>
         <?php foreach ($distributor['relation'] as $film) : ?>
             <tr>
@@ -27,7 +27,7 @@
                     </a>
                 </td>
                 <td><?php echo $film['director']; ?></td>
-                <td><td><?php echo $film['duration']; ?> minutes</td></td>
+                <td><?php echo $film['duration']; ?> minutes</td>
                 <td><?= date('d-m-Y', strtotime($film['release_date'])) ?></td>
                 <td><?php echo $film['rating']; ?></td>
             </tr>

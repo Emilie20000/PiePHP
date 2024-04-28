@@ -114,7 +114,6 @@ class UserModel extends Entity {
             'password' => $this->password
         ];
 
-        var_dump($fields);
 
         $userId = $this->orm->create($this->table, $fields);
 

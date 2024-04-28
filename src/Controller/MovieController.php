@@ -35,12 +35,30 @@ class MovieController extends Controller {
     }
 
     public function deleteAction($id) {
-        $movie = new MovieModel(['id' => $id]);;
+        $movie = new MovieModel(['id' => $id]);
         $movie->id = $id;
         $delete = $movie->deleteMovie();
         if ($delete) {
             $this->redirect('/movie');
         }
+    }
+
+    public function addAction($id) {
+        $this->render('add');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $params = $this->request->getQueryParams();
+            $params['relation_id'] = $id;
+            $movie = new MovieModel($params);
+            var_dump($params);
+            $movie->createMovie();
+
+            if ($movie->id) {
+                $this->redirect('/movie/show/' . $movie->id);
+            }
+        }
+
+      
     }
 
 }
