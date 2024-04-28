@@ -35,7 +35,12 @@ class MovieController extends Controller {
     }
 
     public function deleteAction($id) {
-
+        $movie = new MovieModel(['id' => $id]);;
+        $movie->id = $id;
+        $delete = $movie->deleteMovie();
+        if ($delete) {
+            $this->redirect('/movie');
+        }
     }
 
 }

@@ -51,6 +51,12 @@ class MovieModel extends Entity {
         return $movie;
     }
 
+    public function deleteMovie() {
+        $id = $this->id;
+        $delete = $this->orm->delete($this->table, $id);
+        return $delete;
+    }
+
 }
 
 
