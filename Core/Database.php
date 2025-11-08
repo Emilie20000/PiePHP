@@ -13,10 +13,10 @@ class Database {
 
         if (!self::$connection) {
 
-            define('DB_HOST', 'localhost');
-            define('DB_NAME', 'cinema');
-            define('DB_USER', 'emilie');
-            define('DB_PASSWORD', '1234password');
+            define('DB_HOST', '');
+            define('DB_NAME', '');
+            define('DB_USER', '');
+            define('DB_PASSWORD', '');
 
             try {
                 self::$connection = new PDO('mysql:host=' . DB_HOST . 
